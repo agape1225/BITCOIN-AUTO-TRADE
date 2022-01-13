@@ -8,10 +8,34 @@ from machine.base_machine import Machine
 class KorbitMachine(Machine):
     """코빗 거래소와의 거래를 위핸 클래스"""
 
+    def get_ticker(self):
+        pass
+
+    def get_wallet_status(self):
+        pass
+
+    def get_username(self):
+        pass
+
+    def buy_order(self):
+        pass
+
+    def sell_order(self):
+        pass
+
+    def cancel_order(self):
+        pass
+
+    def get_my_order_status(self):
+        pass
+
+    def get_filled_orders(self):
+        pass
+
     BASE_API_URL = " https://api.korbit.co.kr"
     TRADE_CURRENCY_TYPE = ["btc", "bch", "btg", "eth", "etc", "xrp", "krw"]
 
-    def __int__(self):
+    def __init__(self):
         """
         가장 먼저 호출되는 메서드
         config.ini에서 정보를 읽어옴
@@ -39,7 +63,7 @@ class KorbitMachine(Machine):
         grant_type이 password나 refresh_token이 아닌 경우 Exception을 발생시킨다.
         """
 
-        token_api_path = "https://api.korbit.co.kr/v1/oauth2/access_token"
+        token_api_path = "/v1/oauth2/access_token"
         url_path = self.BASE_API_URL + token_api_path
 
         if grant_type == "password":
@@ -62,6 +86,7 @@ class KorbitMachine(Machine):
 
         res = requests.post(url_path, data=data)
         result = res.json()
+        print(result)
         self.access_token = result['access_token']
         self.token_type = result['token_type']
         self.refresh_token = result['refresh_token']
