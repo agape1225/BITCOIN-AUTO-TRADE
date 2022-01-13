@@ -1,4 +1,5 @@
 import configparser
+import time
 
 from pip._vendor import requests
 
@@ -70,28 +71,25 @@ class KorbitMachine(Machine):
 
             data = {"client_id": self.CLIENT_ID,
                     "client_secret": self.CLIENT_SECRET,
-                    "username": self.USER_NAME,
-                    "password": self.PASSWORD,
-                    "grant_type": grant_type}
+                    "grant_type": 'client_credentials'}
 
         elif grant_type == 'refresh_token':
 
             data = {"client_id": self.CLIENT_ID,
                     "client_secret": self.CLIENT_SECRET,
                     "refresh_token": self.refresh_token,
-                    "grant_type": grant_type}
+                    "grant_type": 'client_credentials'}
 
         else:
             raise Exception("Unexpected grant+type")
 
         res = requests.post(url_path, data=data)
         result = res.json()
-        print(result)
         self.access_token = result['access_token']
         self.token_type = result['token_type']
         self.refresh_token = result['refresh_token']
         self.expire = result['expires_in']
-        return self.expire, self.assess_token, self.refresh_token
+        return self.expire, self.access_token, self.refresh_token
 
     def get_token(self):
        """
@@ -106,3 +104,27 @@ class KorbitMachine(Machine):
        else:
            raise Exception("Need to set_token")
 
+    def get_ticker(self, currency_type=None):
+        """
+        마지막 체결정보를 받아오는 메소드.
+        :param currency_type: 화폐의 종류를 입력받는다.
+        :return: 결과를 딕셔너리로 반환한다.
+        """
+
+        if currency_type is None:
+            raise Exception('Need to currency type')
+        time.sleep(1)
+        params = {'currency_pair' : currency_type}
+        ticker_api_path = "/v1/ticker/detailed"
+        url_path = self.BASE_API_URL + ticker_api_path
+        res = requests.get(url_path, params=params)
+        response_json = res.json()
+        result = {}
+        result["timestamp"] = str(response_json["timestamp"])
+        result["last"] = response_json["last"]
+        result["bid"] = response_json["bid"]
+        result["ask"] = response_json["ask"]
+        result["high"] = response_json["high"]
+        result["low"] = response_json["low"]
+        result["volume"] = response_json["volume"]
+        return result
