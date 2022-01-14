@@ -9,16 +9,7 @@ from machine.base_machine import Machine
 class KorbitMachine(Machine):
     """코빗 거래소와의 거래를 위핸 클래스"""
 
-    def get_ticker(self):
-        pass
-
-    def get_wallet_status(self):
-        pass
-
     def get_username(self):
-        pass
-
-    def buy_order(self):
         pass
 
     def sell_order(self):
@@ -30,11 +21,8 @@ class KorbitMachine(Machine):
     def get_my_order_status(self):
         pass
 
-    def get_filled_orders(self):
-        pass
-
     BASE_API_URL = " https://api.korbit.co.kr"
-    TRADE_CURRENCY_TYPE = ["btc", "bch", "btg", "eth", "etc", "xrp", "krw"]
+    TRADE_CURRENCY_TYPE = ["btc", "eth", "etc", "xrp", "krw", "bch"]
 
     def __init__(self):
         """
@@ -127,4 +115,68 @@ class KorbitMachine(Machine):
         result["high"] = response_json["high"]
         result["low"] = response_json["low"]
         result["volume"] = response_json["volume"]
+        return result
+
+    def get_filled_orders(self, currency_type=None, per="minute"):
+        """
+
+        :param currency_type: 화폐의 종류를 입력받는다. 화폐의 종류는 TRADE_CURRENCY_TYPE에 정의되어 있다.
+        :param per: minute, hour, day로 체결 정보를 받아올 시각을 정한다.
+        :return:최근 체결 정보를 dictionary형태로 반환한다.
+        """
+
+        if currency_type is None:
+            raise Exception("Need to currency_type")
+        time.sleep(1)
+        params = {'currency_pair': currency_type, 'time': per}
+        orders_api_path = "/v1/transactions"
+        url_path = self.BASE_API_URL + orders_api_path
+        res = requests.get(url_path, params=params)
+        result = res.json()
+        return result
+
+    def get_wallet_status(self):
+        """
+        사용자의 지갑정보를 조회하는 메서드이다.
+        :return: 사용자의 지갑에 화폐별 잔액을 딕셔너리 형태로 반환한다.
+        """
+
+        time.sleep(1)
+        wallet_statue_api_path = "/v1/user/balances"
+        url_path = self.BASE_API_URL + wallet_statue_api_path
+        print(self.access_token)
+        headers = {"Authorization": "Bearer " + self.access_token}
+        res = requests.get(url_path, headers=headers)
+        result = res.json()
+        wallet_statue = {currency:dict(avail=result[currency]["available"]) for currency in self.TRADE_CURRENCY_TYPE}
+        for item in self.TRADE_CURRENCY_TYPE:
+            wallet_statue[item]["balance"] = str(float(result[item]["trade_in_use"]) + float(result[item]["withdrawal_in_use"]))
+        return wallet_statue
+
+    def get_nonce(self):
+        return str(int(time.time()))
+
+    def buy_order(self, currency_type = None, price=None, qty = None, order_type= "limit"):
+        """
+
+        :param currency_type: 화폐의 종류를 입력받는다. 화폐의 종류는 TRADE_CURRENCY_TYPE에 정의되어있다.
+        :param price: 1개 수량 주문에 해당하는 원화 값
+        :param qty: 주문 수량
+        :param order_type:
+        :return: 주문의 상태를 반환한다.
+        """
+        time.sleep(1)
+        if currency_type is None or price is None or qty in None:
+            raise Exception("Need to param")
+        buy_order_api_path = "/v1/user/orders/buy"
+        url_path = self.BASE_API_URL + buy_order_api_path
+        print(self.access_token)
+        headers = {"Authorization" : "Bearer " + self.access_token}
+        data = {"currency_pair" : currency_type,
+                "type" : order_type,
+                "price" : price,
+                "coin_amount" : qty,
+                "nonce" : self.get_nonce()}
+        res = requests.post(url_path, headers=headers, data=data)
+        result = res.json()
         return result

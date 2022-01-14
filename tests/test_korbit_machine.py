@@ -7,6 +7,7 @@ class KorbitMachineTestCase(unittest.TestCase):
 
     def __init__(self):
         self.korbit_machine = KorbitMachine()
+        self.korbit_machine.set_token()
         print()
 
     def tearDown(self):
@@ -31,4 +32,23 @@ class KorbitMachineTestCase(unittest.TestCase):
         assert ticker
         print(ticker)
 
-KorbitMachineTestCase().test_get_ticker()
+    def test_get_filled_orders(self):
+        print(inspect.stack()[0][3])
+        order_book =  self.korbit_machine.get_filled_orders(currency_type='btc_krw')
+        assert order_book
+        print(order_book)
+
+    def test_get_wallet_status(self):
+        print(inspect.stack()[0][3])
+        wallet_status = self.korbit_machine.get_wallet_status()
+        assert wallet_status
+        print(wallet_status)
+
+    def test_buy_order(self):
+        print(inspect.stack()[0][3])
+        buy_order = self.korbit_machine.buy_order(currency_type="etc_krw", price="15000", qty="1", order_type="limit")
+        assert buy_order
+        print(buy_order)
+
+#main
+KorbitMachineTestCase().test_buy_order()
