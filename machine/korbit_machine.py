@@ -15,12 +15,6 @@ class KorbitMachine(Machine):
     def sell_order(self):
         pass
 
-    def cancel_order(self):
-        pass
-
-    def get_my_order_status(self):
-        pass
-
     BASE_API_URL = " https://api.korbit.co.kr"
     TRADE_CURRENCY_TYPE = ["btc", "eth", "etc", "xrp", "krw", "bch"]
 
@@ -181,3 +175,47 @@ class KorbitMachine(Machine):
         res = requests.post(url_path, headers=headers, data=data)
         result = res.json()
         return result
+
+    def cancel_order(self, currency_type=None, price=None, qty=None, order_type=None, order_id=None):
+        """
+        주문을 취소하는 메소드.
+        :param currency_type: 화폐의 종류를 입력받는다.
+        :param price:
+        :param qty:
+        :param order_type:
+        :param order_id:
+        :return: 주문의 상태를 반환한다.
+        """
+
+        time.sleep(1)
+        if currency_type is None or order_id is None:
+            raise Exception("Need to params")
+        cancel_order_api_path = "/v1/user/orders/cancel"
+        url_path = self.BASE_API_URL + cancel_order_api_path
+        headers = {"Authorization" : "Bearer " + self.access_token}
+        data = {"currency_pair":currency_type,
+                "id":order_id,
+                "nonce":self.get_nonce()}
+        res = requests.post(url_path, headers=headers, data=data)
+        result = res.json()
+        return result
+
+    def get_my_order_status(self, currency_type=None, order_id=None):
+        """
+        사용자의 주문 상세 정보를 조회하는 메소드이다.
+        :param currency_type: 화폐 종류를 입력받는다.
+        :param order_id: 거래 ID
+        :return: order_id에 해당하는 주문의 상세 정보를 반환한다.
+        """
+
+        if currency_type is None or order_id is None:
+            raise Exception("Need to currency_pair and order id")
+        time.sleep(1)
+        list_transaction_api_path = "/v1/user/orders"
+        url_path = self.BASE_API_URL + list_transaction_api_path
+        headers = {"Authorization": "Bearer " + self.access_token}
+        params = {"currency_pair": currency_type,
+                  "id": order_id}
+        res = requests.get(url_path, headers=headers, params=params)
+        #result = res.json()
+        return res

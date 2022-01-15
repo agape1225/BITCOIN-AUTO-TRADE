@@ -45,9 +45,21 @@ class KorbitMachineTestCase(unittest.TestCase):
 
     def test_buy_order(self):
         print(inspect.stack()[0][3])
-        buy_order = self.korbit_machine.buy_order(currency_type="etc_krw", price="15000", qty="1", order_type="limit")
+        buy_order = self.korbit_machine.buy_order(currency_type="etc_krw", price="5000", qty="1", order_type="limit")
         assert buy_order
         print(buy_order)
 
+    def test_cancel_order(self):
+        print(inspect.stack()[0][3])
+        cancel_order = self.korbit_machine.cancel_order(currency_type="etc_krw", order_id="")
+        assert cancel_order
+        print(cancel_order)
+
+    def test_get_my_order_status(self):
+        print(inspect.stack()[0][3])
+        my_order = self.korbit_machine.get_my_order_status("etc_krw", "")
+        #assert my_order
+        print(my_order)
+
 #main
-KorbitMachineTestCase().test_buy_order()
+KorbitMachineTestCase().test_get_my_order_status()
