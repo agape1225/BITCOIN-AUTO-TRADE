@@ -8,7 +8,6 @@ class KorbitMachineTestCase(unittest.TestCase):
     def __init__(self):
         self.korbit_machine = KorbitMachine()
         self.korbit_machine.set_token()
-        print()
 
     def tearDown(self):
         pass

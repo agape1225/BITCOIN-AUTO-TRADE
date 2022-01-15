@@ -77,6 +77,7 @@ class KorbitMachine(Machine):
         self.token_type = result['token_type']
         self.refresh_token = result['refresh_token']
         self.expire = result['expires_in']
+        print(self.access_token)
         return self.expire, self.access_token, self.refresh_token
 
     def get_token(self):
@@ -102,7 +103,7 @@ class KorbitMachine(Machine):
         if currency_type is None:
             raise Exception('Need to currency type')
         time.sleep(1)
-        params = {'currency_pair' : currency_type}
+        params = {'currency_pair': currency_type}
         ticker_api_path = "/v1/ticker/detailed"
         url_path = self.BASE_API_URL + ticker_api_path
         res = requests.get(url_path, params=params)
@@ -156,7 +157,7 @@ class KorbitMachine(Machine):
     def get_nonce(self):
         return str(int(time.time()))
 
-    def buy_order(self, currency_type = None, price=None, qty = None, order_type= "limit"):
+    def buy_order(self, currency_type=None, price=None, qty=None, order_type="limit"):
         """
 
         :param currency_type: 화폐의 종류를 입력받는다. 화폐의 종류는 TRADE_CURRENCY_TYPE에 정의되어있다.
@@ -166,17 +167,17 @@ class KorbitMachine(Machine):
         :return: 주문의 상태를 반환한다.
         """
         time.sleep(1)
-        if currency_type is None or price is None or qty in None:
+        if currency_type is None or price is None or qty is None:
             raise Exception("Need to param")
         buy_order_api_path = "/v1/user/orders/buy"
         url_path = self.BASE_API_URL + buy_order_api_path
         print(self.access_token)
-        headers = {"Authorization" : "Bearer " + self.access_token}
-        data = {"currency_pair" : currency_type,
-                "type" : order_type,
-                "price" : price,
-                "coin_amount" : qty,
-                "nonce" : self.get_nonce()}
+        headers = {"Authorization": "Bearer " + self.access_token}
+        data = {"currency_pair": currency_type,
+                "type": order_type,
+                "price": price,
+                "coin_amount": qty,
+                "nonce": self.get_nonce()}
         res = requests.post(url_path, headers=headers, data=data)
         result = res.json()
         return result
