@@ -62,4 +62,4 @@ class KorbitMachineTestCase(unittest.TestCase):
         print(my_order)
 
 #main
-KorbitMachineTestCase().test_get_my_order_status()
+KorbitMachineTestCase().test_get_wallet_status()
