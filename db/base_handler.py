@@ -3,6 +3,10 @@ from abc import ABC, abstractmethod
 class DBHandler(ABC):
 
     @abstractmethod
+    def insert_item(self):
+        pass
+
+    @abstractmethod
     def insert_items(self):
         pass
 

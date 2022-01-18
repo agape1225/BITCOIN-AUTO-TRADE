@@ -21,7 +21,7 @@ class MongoDBHandler(DBHandler):
         if mode == "remote":
             self._client = MongoClient("mongodb://{user}:{password}@{remote_host}:{port}".format(**self.db_config))
         elif mode == "local":
-            self._client = MongoClient("mongodb://{user}:{password}@{local_ip}:{port}".format(**self.db_config))
+            self._client = MongoClient(host='localhost', port=27017)
 
         self._db = self._client[db_name]
         self._collection = self._db[collection_name]
@@ -61,14 +61,70 @@ class MongoDBHandler(DBHandler):
         """
         return self._collection.name
 
-    def insert_items(self):
-        pass
+    def insert_item(self, data, db_name=None, collection_name=None):
+        """
 
-    def find_items(self):
-        pass
+        :param data:
+        :param db_name: 데이터베이스에 해당하는 이름
+        :param collection_name: 데이터베이스에 속하는 콜렉션
+        :return: 입력 완료된 문서의 ObjectId를 반환한다.
+        """
 
-    def find_item(self):
-        pass
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+
+        return self._collection.insert_one(data).inserted_id
+
+    def insert_items(self, datas, db_name=None, collection_name=None):
+        """
+        MongoDB에 다수의 문서를 입력하기 위한 메소드이다.
+        :param datas:
+        :param db_name: MongoDB에서 데이터베이스에 해당하는 이름을 받는다.
+        :param collection_name: 데이터베이스에 속하는 콜렉션 이름을 받는다.
+        :return: 입력 완료된 문서의 ObjectId리스트를 반환한다.
+        """
+
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection_name = self._db[collection_name]
+        return self._collection.insert_many(datas).inserted_ids
+
+    def find_items(self, condition=None, db_name=None, collection_name=None):
+        """
+        MongoDB에서 다수의 문서를 검색하기 위한 메소드이다.
+        :param condition: 검색 조건을 딕셔너리 형태로 받는다
+        :param db_name: MongoDB에서 데이터베이스에 해당하는 이름을 받는다.
+        :param collection_name: 데이터베이스에 속하는 콜렉션 이름을 받는다.
+        :return: 커서를 반환한다.
+        """
+        if condition is None:
+            condition = {}
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+
+        return self._collection.find(condition, no_cursor_timeout=True, cursor_type=CursorType.EXHAUST)
+
+    def find_item(self, condition=None, db_name=None, collection_name=None):
+        """
+        MongdDB에서 하나의 문서를 검색하기 의한 메소드입니다.
+        :param condition: 검색 조건을 딕셔너리 형태로 받는다
+        :param db_name: MongoDB에서 데이터베이스에 해당하는 이름을 받는다
+        :param collection_name: 데이터베이스에 속하는 콜렉션 이름을 받는다
+        :return: 만약 검색된 문서가 있다면 문서의 내용을 반환한다
+        """
+
+        if condition is None:
+            condition = {}
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+        return self._collection.find_one(condition)
 
     def delete_items(self):
         pass
