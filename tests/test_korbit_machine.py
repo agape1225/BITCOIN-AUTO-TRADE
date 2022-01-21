@@ -7,7 +7,7 @@ class KorbitMachineTestCase(unittest.TestCase):
 
     def __init__(self):
         self.korbit_machine = KorbitMachine()
-        self.korbit_machine.set_token()
+        #self.korbit_machine.set_token()
 
     def tearDown(self):
         pass
@@ -62,4 +62,4 @@ class KorbitMachineTestCase(unittest.TestCase):
         print(my_order)
 
 #main
-KorbitMachineTestCase().test_get_wallet_status()
+KorbitMachineTestCase().test_set_token()
