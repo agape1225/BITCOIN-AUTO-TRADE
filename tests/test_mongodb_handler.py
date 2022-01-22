@@ -13,12 +13,12 @@ class MongoDBHandlerTestCase(unittest.TestCase):
             {"currency": "eth", "price": 2000},
             {"currency": "xrp", "price": 200},
         ]
+        self.mongodb.insert_item(docs)
 
     def tearDown(self):
         pass
 
-    if __name__ == "__main__":
-        unittest.main()
+
 
     def test_set_db_collection(self):
         """
@@ -68,7 +68,6 @@ class MongoDBHandlerTestCase(unittest.TestCase):
         for doc in cursor:
             print(doc)
 
-mongodb = MongoDBHandlerTestCase()
-mongodb.setUp()
-mongodb.test_insert_item()
-print(123)
+
+if __name__ == "__main__":
+    unittest.main()

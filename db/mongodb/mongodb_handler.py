@@ -126,11 +126,55 @@ class MongoDBHandler(DBHandler):
             self._collection = self._db[collection_name]
         return self._collection.find_one(condition)
 
-    def delete_items(self):
-        pass
+    def delete_items(self, condition=None, db=None, collection=None):
+        """
+        Mongodb에서 다수의 collection을 삭제한다.
+        :param condition: 삭제 조건을 딕셔너리 형태로 받는다.
+        :param db: Mongodb에서 데이터베이스에 해당하는 이름을 받는다.
+        :param collection: 데이터베이스에 속하는 collection이름을 받는다.
+        :return: PyMondo의 문서의 삭제 결과 객체인 DeleteResult가 반환된다.
+        """
 
-    def update_items(self):
-        pass
+        if condition is None:
+            raise Exception("Need to condition")
+        if db is not None:
+            self._db = self._client[db]
+        if collection is not None:
+            self._collection = self._db[collection]
+        return self._collection.delete_many(condition)
 
-    def aggregate(self):
-        pass
+    def update_items(self, condition=None, update_value=None, db_name=None, collection_name=None):
+        """
+        MongoDB에서 다수의 문서를 갱신하기 위한 메소드이다.
+        :param condition: 업데이트 조건을 딕셔너리 형태로 받는다.
+        :param update_value: 업데이트하고자 하는 값을 딕셔너리 형태로 받는다.
+        :param db_name: MongoDB에서 데이터베이스에 해당하는 이름을 받는다.
+        :param collection_name: 데이터베이스에 속하는 콜렉션 이름을 받는다.
+        :return: PyMongo의 문서의 업데이트 결과 객체인 UpdateResult가 반환된다.
+        """
+        if condition is None:
+            raise Exception("Need to condition")
+        if update_value is None:
+            raise Exception("Need to update value")
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+        return self._collection.update_many(filter=condition, update=update_value)
+
+    def aggregate(self, pipeline=None, db_name=None, collection_name=None):
+        """
+        MongoDB의 집계 작업을 위한 메소드이다.
+        :param pipeline: 갱신 조건을 딕셔너리 형태로 받는다.
+        :param db_name: MongoDB에서 데이터베이스에 해당하는 이름을 받는다.
+        :param collection_name:  데이터배이스에 속하는 콜렉션 이름을 받는다.
+        :return: PyMongo의 CommandCursor를 반환한다.
+        """
+
+        if pipeline is None:
+            raise Exception("Need to pipeline")
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+        return self._collection.aggregate(pipeline)
