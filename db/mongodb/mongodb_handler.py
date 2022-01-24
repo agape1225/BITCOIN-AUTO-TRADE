@@ -107,7 +107,7 @@ class MongoDBHandler(DBHandler):
         if collection_name is not None:
             self._collection = self._db[collection_name]
 
-        return self._collection.find(condition, no_cursor_timeout=True, cursor_type=CursorType.EXHAUST)
+        return self._collection.find(condition, cursor_type=CursorType.EXHAUST)
 
     def find_item(self, condition=None, db_name=None, collection_name=None):
         """
