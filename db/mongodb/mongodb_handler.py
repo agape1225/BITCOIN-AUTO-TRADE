@@ -3,8 +3,8 @@ from pymongo.cursor import CursorType
 import configparser
 from db.base_handler import DBHandler
 
-class MongoDBHandler(DBHandler):
 
+class MongoDBHandler(DBHandler):
     """
     PyMongo를 래핑해서 사용하는 클래스이다. DBHandler 추상 클래스를 상속한다.
     리모트 DB와 로컬 DB를 모두 사용할 수 있도록 __init__에서 mode로 구분한다.
