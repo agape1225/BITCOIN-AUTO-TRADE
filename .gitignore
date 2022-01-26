@@ -1,3 +1,4 @@
 conf/config.ini
 *.pyc
 *.log
+pusher/email.py
