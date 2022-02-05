@@ -7,7 +7,7 @@ class KorbitMachineTestCase(unittest.TestCase):
 
     def __init__(self):
         self.korbit_machine = KorbitMachine()
-        #self.korbit_machine.set_token()
+        self.korbit_machine.set_token()
 
     def tearDown(self):
         pass
@@ -61,5 +61,11 @@ class KorbitMachineTestCase(unittest.TestCase):
         #assert my_order
         print(my_order)
 
+    def test_sell_order(self):
+        print(inspect.stack()[0][3])
+        sell_order = self.korbit_machine.sell_order(currency_type="etc_krw", price="40000", qty="1", order_type="limit")
+        assert sell_order
+        print(sell_order)
+
 #main
-KorbitMachineTestCase().test_set_token()
+KorbitMachineTestCase().test_sell_order()

@@ -12,8 +12,31 @@ class KorbitMachine(Machine):
     def get_username(self):
         pass
 
-    def sell_order(self):
-        pass
+    def sell_order(self, currency_type=None, price=None, qty=None, order_type="limit"):
+        """
+        매도주문을 실행하는 메소드.
+        :param currency_type: 화폐종류를 입력받는다. 화페의 종류는 TRADE_CURRENCY_TYPE에 정의돼있다.
+        :param price: 1개 수량 주문헤 해당하는 원화 값.
+        :param qty: 주문 수량.
+        :param order_type:
+        :return:
+        """
+        time.sleep(1)
+        if price is None or qty is None or currency_type is None:
+            raise Exception("Need to params")
+        if order_type != "limit":
+            raise Exception("Check order type")
+        sell_order_api_path = "/v1/user/orders/sell"
+        url_path = self.BASE_API_URL + sell_order_api_path
+        headers = {"Authorization": "Bearer " + self.access_token}
+        data = {"currency_pair": currency_type,
+                "type": order_type,
+                "price": price,
+                "coin_amount": qty,
+                "nonce": self.get_nonce()}
+        res = requests.post(url_path, headers=headers, data=data)
+        result = res.json()
+        return result
 
     BASE_API_URL = " https://api.korbit.co.kr"
     TRADE_CURRENCY_TYPE = ["btc", "eth", "etc", "xrp", "krw", "bch"]

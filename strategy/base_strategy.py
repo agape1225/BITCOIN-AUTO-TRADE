@@ -10,13 +10,17 @@ class Strategy(ABC):
     def run(self):
         pass
 
-    def update_trade_status(self, db_handler=None, buy=None, value=None):
+    def update_trade_status(self, db_handler=None, item_id=None, value=None):
         """
         현재 상태를 업데이트하는 메소드
         :param db_handler: 대상 데이터베이스의 모듈 객체
         :param buy: 업데이트 조건
         :param value: 업데이트하려는 문서의 칼럼과 값
         """
+        if db_handler is None or item_id is None or value is None:
+            raise Exception("Need to buy value or status")
+        db_handler.set_db("trader", "trade_status")
+        db_handler.update_item(item_id, {"$set": value})
 
     def order_buy_transaction(self, machine=None, db_handler=None,
                               currency_type=None, item=None, order_type="limit"):
