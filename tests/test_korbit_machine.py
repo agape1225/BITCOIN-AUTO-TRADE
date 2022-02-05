@@ -58,7 +58,7 @@ class KorbitMachineTestCase(unittest.TestCase):
     def test_get_my_order_status(self):
         print(inspect.stack()[0][3])
         my_order = self.korbit_machine.get_my_order_status("etc_krw", "")
-        #assert my_order
+        assert my_order
         print(my_order)
 
     def test_sell_order(self):
@@ -68,4 +68,4 @@ class KorbitMachineTestCase(unittest.TestCase):
         print(sell_order)
 
 #main
-KorbitMachineTestCase().test_sell_order()
+KorbitMachineTestCase().test_get_wallet_status()

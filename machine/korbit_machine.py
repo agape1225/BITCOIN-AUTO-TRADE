@@ -240,5 +240,5 @@ class KorbitMachine(Machine):
         params = {"currency_pair": currency_type,
                   "id": order_id}
         res = requests.get(url_path, headers=headers, params=params)
-        #result = res.json()
-        return res
+        result = res.json()
+        return result
