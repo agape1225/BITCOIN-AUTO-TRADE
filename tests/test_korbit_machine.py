@@ -27,7 +27,7 @@ class KorbitMachineTestCase(unittest.TestCase):
 
     def test_get_ticker(self):
         print(inspect.stack()[0][3])
-        ticker = self.korbit_machine.get_ticker("etc_krw")
+        ticker = self.korbit_machine.get_ticker("luna_krw")
         assert ticker
         print(ticker)
 
@@ -68,4 +68,4 @@ class KorbitMachineTestCase(unittest.TestCase):
         print(sell_order)
 
 #main
-KorbitMachineTestCase().test_get_wallet_status()
+KorbitMachineTestCase().test_get_ticker()
