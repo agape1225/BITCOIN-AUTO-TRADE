@@ -29,6 +29,14 @@ class StepTrade(Strategy):
         last = self.machine.get_ticker(self.currency_type)
         self.last_val = int(last["last"])
 
+    def check_buy_ordered(self):
+        buy_orders = self.db_handler.find_item({"currency": self.currency_type, "status": "BUY_ORDERED"}, "trader", "trade_status")
+        for item in buy_orders:
+            logger.info(item)
+            order_result = self.machine.get_my_order_status(self.currency_type, order_id=item["buy_order_id"])
+            logger.info(order_result)
+
+
 if __name__ == "__main__":
     mongodb = MongoDBHandler()
     korbit_machine = KorbitMachine()
