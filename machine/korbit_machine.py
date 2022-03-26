@@ -196,6 +196,7 @@ class KorbitMachine(Machine):
                 "coin_amount": qty,
                 "nonce": self.get_nonce()}
         res = requests.post(url_path, headers=headers, data=data)
+        print(res)
         result = res.json()
         return result
 
