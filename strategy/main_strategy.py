@@ -10,7 +10,4 @@ strategy = Strategy()
 #strategy.update_order_state()
 strategy.sell_coin()
 
-
-
-
 #KorbitMachineTestCase().test_get_wallet_status()

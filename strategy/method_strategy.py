@@ -26,10 +26,8 @@ class Strategy:
 
         if result["status"] == "success":
             result["order_state"] = "PURINPRO"
-            result["target_price"] = round(coin_value + (coin_value / 20), 6)
+            result["target_price"] = int(round(coin_value + (coin_value / 20), 6)/100) * 100
             self.database.insert_item(result, "trader", "trade_status")
-
-        print(result)
 
     def update_order_state(self):
         all_states = self.database.find_items()
@@ -62,7 +60,6 @@ class Strategy:
                 currencyPair = item["currencyPair"]
                 target_price = int(item["target_price"])
                 target_amount = item["target_amount"]
-                print(target_price)
-                result = self.machine.sell_order(currencyPair, 116400, target_amount, "limit")
+                result = self.machine.sell_order(currencyPair, target_price, target_amount, "limit")
                 assert result
                 print(result)
