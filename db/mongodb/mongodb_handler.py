@@ -26,6 +26,25 @@ class MongoDBHandler(DBHandler):
         self._db = self._client[db_name]
         self._collection = self._db[collection_name]
 
+    def get_order_number(self, db_name=None, collection_name=None):
+        """
+
+        현재 진행중인 주문의 갯수를 반환하는 함수
+
+        :param db_name: 데이터베이스에 해당하는 이름을 입력받는다
+        :param collection_name: 데이터베이스에 속하는 컬랙션을 입력받는다
+        :return:
+        """
+
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+
+        result = self._collection.find({"order_state": "PURINPRO"})
+        return len(list(result))
+
+
     def set_db_collection(self, db_name=None, collection_name=None):
         """
 

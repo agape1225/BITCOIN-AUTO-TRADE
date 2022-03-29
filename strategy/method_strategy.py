@@ -10,24 +10,26 @@ class Strategy:
         self.machine.set_token()
 
     def order_coin(self):
-        ticker = self.machine.get_ticker("luna_krw")
-        assert ticker
-        wallet = self.machine.get_wallet_status()
-        assert wallet
-
-        coin_value = int(ticker["last"])
-        avail_money = int(wallet["krw"]["avail"])
-
-        target_money_value = avail_money / 10
-        target_coin_value = target_money_value / coin_value
-        result = self.machine.buy_order("luna_krw", coin_value, target_coin_value)
-
-        assert result
-
-        if result["status"] == "success":
-            result["order_state"] = "PURINPRO"
-            result["target_price"] = int(round(coin_value + (coin_value / 20), 6)/100) * 100
-            self.database.insert_item(result, "trader", "trade_status")
+        # ticker = self.machine.get_ticker("luna_krw")
+        # assert ticker
+        # wallet = self.machine.get_wallet_status()
+        # assert wallet
+        #
+        # coin_value = int(ticker["last"])
+        # avail_money = int(wallet["krw"]["avail"])
+        #
+        # target_money_value = avail_money / 10
+        # target_coin_value = target_money_value / coin_value
+        # result = self.machine.buy_order("luna_krw", coin_value, target_coin_value)
+        #
+        # assert result
+        #
+        # if result["status"] == "success":
+        #     result["order_state"] = "PURINPRO"
+        #     result["target_price"] = int(round(coin_value + (coin_value / 50), 6) / 100) * 100
+        #     self.database.insert_item(result, "trader", "trade_status")
+        test_result = self.database.get_order_number("trader", "trade_status")
+        print(test_result)
 
     def update_order_state(self):
         all_states = self.database.find_items()
@@ -62,4 +64,30 @@ class Strategy:
                 target_amount = item["target_amount"]
                 result = self.machine.sell_order(currencyPair, target_price, target_amount, "limit")
                 assert result
-                print(result)
+
+                if result["status"] == "success":
+                    orderId = item["orderId"]
+                    self.database.update_items(condition={"orderId": orderId},
+                                               update_value={"$set": {"order_state": "SELORDSTA",
+                                                                      "sell_id": result["orderId"]}}
+                                               )
+
+    def update_sell_state(self):
+        all_states = self.database.find_items()
+        assert all_states
+
+        for item in all_states:
+
+            if item["order_state"] == "SELORDSTA":
+                pair = item["currencyPair"]
+                orderId = item["sell_id"]
+                result = self.machine.get_my_order_status(pair, orderId)
+                assert result
+
+                if result["status"] == "filled":
+                    item["order_state"] = "SELORDCOM"
+                    """self.database.update_items(condition={"sell_id": orderId},
+                                               update_value={"$set": {"order_state": "SELORDCOM"}})"""
+                    self.database.delete_items({"sell_id": orderId})
+                    self.database.set_db_collection("trader", "trade_history")
+                    self.database.insert_item(item)
