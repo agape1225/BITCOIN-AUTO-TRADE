@@ -10,26 +10,29 @@ class Strategy:
         self.machine.set_token()
 
     def order_coin(self):
-        # ticker = self.machine.get_ticker("luna_krw")
-        # assert ticker
-        # wallet = self.machine.get_wallet_status()
-        # assert wallet
-        #
-        # coin_value = int(ticker["last"])
-        # avail_money = int(wallet["krw"]["avail"])
-        #
-        # target_money_value = avail_money / 10
-        # target_coin_value = target_money_value / coin_value
-        # result = self.machine.buy_order("luna_krw", coin_value, target_coin_value)
-        #
-        # assert result
-        #
-        # if result["status"] == "success":
-        #     result["order_state"] = "PURINPRO"
-        #     result["target_price"] = int(round(coin_value + (coin_value / 50), 6) / 100) * 100
-        #     self.database.insert_item(result, "trader", "trade_status")
-        test_result = self.database.get_order_number("trader", "trade_status")
-        print(test_result)
+        ticker = self.machine.get_ticker("luna_krw")
+        assert ticker
+        wallet = self.machine.get_wallet_status()
+        assert wallet
+
+        coin_value = int(ticker["last"])
+        avail_money = int(wallet["krw"]["avail"])
+
+        target_money_value = avail_money / 10
+        if(target_money_value >= 5000):
+            # target_coin_value = round(target_money_value / coin_value, 6)
+            target_coin_value = target_money_value / coin_value
+            print(coin_value)
+            print(target_coin_value)
+            print(target_money_value)
+            result = self.machine.buy_order("luna_krw", coin_value, target_coin_value)
+            assert result
+
+            if result["status"] == "success":
+                result["order_state"] = "PURINPRO"
+                result["target_price"] = int(round(coin_value + (coin_value / 50), 6) / 100) * 100
+                self.database.insert_item(result, "trader", "trade_status")
+
 
     def update_order_state(self):
         all_states = self.database.find_items()

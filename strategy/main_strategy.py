@@ -5,12 +5,12 @@ import pusher.email
 from strategy.method_strategy import Strategy
 from tests.test_korbit_machine import KorbitMachineTestCase
 
-for i in range(70):
-    print(i + 1)
-    Strategy()
+# for i in range(70):
+#     print(i + 1)
+#     Strategy()
 
-#strategy = Strategy()
-#strategy.order_coin()
+strategy = Strategy()
+strategy.order_coin()
 #strategy.update_order_state()
 #strategy.sell_coin()
 #strategy.update_sell_state()
