@@ -10,8 +10,8 @@ from tests.test_korbit_machine import KorbitMachineTestCase
 #     Strategy()
 
 strategy = Strategy()
-strategy.order_coin()
-#strategy.update_order_state()
+#strategy.order_coin()
+strategy.update_order_state()
 #strategy.sell_coin()
 #strategy.update_sell_state()
 

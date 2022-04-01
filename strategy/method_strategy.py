@@ -40,21 +40,22 @@ class Strategy:
 
         for item in all_states:
 
-            if item["order_state"] == "PURINPRO":
-
+            if item["order_state"] == "BUYORDCOM":
+                #PURINPRO
                 pair = item["currencyPair"]
                 orderId = item["orderId"]
                 result = self.machine.get_my_order_status(pair, orderId)
-                assert result
+                if len(result) > 0:
+                    assert result
+                    result = result[0]
+                    print(result)
+                    if result["status"] == "filled":
+                        target_coin_amount = float(result["order_amount"]) - float(result["fee"])
+                        self.database.update_items(condition={"orderId": orderId},
+                                                   update_value={"$set": {"order_state": "BUYORDCOM"}})
+                        self.database.update_items(condition={"orderId": orderId},
+                                                   update_value={"$set": {"target_amount": target_coin_amount}})
 
-                result = result[0]
-
-                if result["status"] == "filled":
-                    target_coin_amount = float(result["order_amount"]) - float(result["fee"])
-                    self.database.update_items(condition={"orderId": orderId},
-                                               update_value={"$set": {"order_state": "BUYORDCOM"}})
-                    self.database.update_items(condition={"orderId": orderId},
-                                               update_value={"$set": {"target_amount": target_coin_amount}})
 
     def sell_coin(self):
         all_states = self.database.find_items()
