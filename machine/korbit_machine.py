@@ -1,8 +1,6 @@
 import configparser
 import time
-
 from pip._vendor import requests
-
 from machine.base_machine import Machine
 
 
@@ -94,7 +92,6 @@ class KorbitMachine(Machine):
         self.token_type = result['token_type']
         self.refresh_token = result['refresh_token']
         self.expire = result['expires_in']
-        print(self.access_token)
         return self.expire, self.access_token, self.refresh_token
 
     def get_token(self):
@@ -162,7 +159,6 @@ class KorbitMachine(Machine):
         time.sleep(1)
         wallet_statue_api_path = "/v1/user/balances"
         url_path = self.BASE_API_URL + wallet_statue_api_path
-        print(self.access_token)
         headers = {"Authorization": "Bearer " + self.access_token}
         res = requests.get(url_path, headers=headers)
         result = res.json()
@@ -188,7 +184,6 @@ class KorbitMachine(Machine):
             raise Exception("Need to param")
         buy_order_api_path = "/v1/user/orders/buy"
         url_path = self.BASE_API_URL + buy_order_api_path
-        print(self.access_token)
         headers = {"Authorization": "Bearer " + self.access_token}
         data = {"currency_pair": currency_type,
                 "type": order_type,
