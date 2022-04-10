@@ -17,6 +17,7 @@ class Strategy:
 
         coin_value = int(ticker["last"])
         avail_money = int(wallet["krw"]["avail"])
+        print(coin_value + 200)
 
         target_money_value = avail_money / 10
         if(target_money_value >= 5000):
@@ -30,7 +31,8 @@ class Strategy:
                 self.database.insert_item(result, "trader", "trade_status")
                 print( "result = ", result)
                 print("END order_coin method")
-
+        else:
+            print("no more money")
 
     def update_order_state(self):
         count = 0
