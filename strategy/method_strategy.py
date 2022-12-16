@@ -64,10 +64,13 @@ class Strategy:
         for item in all_states:
             if item["order_state"] == "BUYORDCOM":
                 currencyPair = item["currencyPair"]
-                target_price = int(item["target_price"])
+                target_price = round(int(item["target_price"]) / 1000) * 1000
                 target_amount = item["target_amount"]
+
                 result = self.machine.sell_order(currencyPair, target_price, target_amount, "limit")
                 assert result
+
+                print(result)
 
                 if result["status"] == "success":
                     count += 1

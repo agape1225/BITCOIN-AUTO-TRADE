@@ -42,11 +42,13 @@ class KorbitMachine(Machine):
         sell_order_api_path = "/v1/user/orders/sell"
         url_path = self.BASE_API_URL + sell_order_api_path
         headers = {"Authorization": "Bearer " + self.access_token}
-        data = {"currency_pair": currency_type,
-                "type": order_type,
-                "price": price,
-                "coin_amount": qty,
-                "nonce": self.get_nonce()}
+        data = {
+            "currency_pair": currency_type,
+            "type": order_type,
+            "price": price,
+            "coin_amount": qty,
+            "nonce": self.get_nonce()
+        }
         res = requests.post(url_path, headers=headers, data=data)
         result = res.json()
         return result
