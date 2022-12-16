@@ -10,7 +10,7 @@ class Strategy:
         self.machine.set_token()
 
     def order_coin(self):
-        ticker = self.machine.get_ticker("luna_krw")
+        ticker = self.machine.get_ticker("btc_krw")
         assert ticker
         wallet = self.machine.get_wallet_status()
         assert wallet
@@ -22,14 +22,14 @@ class Strategy:
         target_money_value = avail_money / 10
         if(target_money_value >= 5000):
             target_coin_value = target_money_value / coin_value
-            result = self.machine.buy_order("luna_krw", coin_value, target_coin_value)
+            result = self.machine.buy_order("btc_krw", coin_value, target_coin_value)
             assert result
 
             if result["status"] == "success":
                 result["order_state"] = "PURINPRO"
                 result["target_price"] = int(round(coin_value + (coin_value / 50), 6) / 100) * 100
                 self.database.insert_item(result, "trader", "trade_status")
-                print( "result = ", result)
+                print("result = ", result)
                 print("END order_coin method")
         else:
             print("no more money")

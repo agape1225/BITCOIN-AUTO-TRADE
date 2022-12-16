@@ -68,4 +68,4 @@ class KorbitMachineTestCase(unittest.TestCase):
         print(sell_order)
 
 #main
-#KorbitMachineTestCase().test_get_ticker()
+KorbitMachineTestCase().test_set_token()

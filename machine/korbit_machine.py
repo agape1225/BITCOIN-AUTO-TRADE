@@ -13,7 +13,7 @@ class KorbitMachine(Machine):
         config.ini에서 정보를 읽어옴
         """
         config = configparser.ConfigParser()
-        config.read('conf/config.ini')
+        config.read('../conf/config.ini')
         self.CLIENT_ID = config['KORBIT']['client_id']
         self.CLIENT_SECRET = config['KORBIT']['client_secret']
         self.USER_NAME = config['KORBIT']['username']
