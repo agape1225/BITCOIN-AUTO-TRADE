@@ -1,4 +1,4 @@
-from data.method_data import DataCollecter
+from data.method_data import DataCollector
 
-dt = DataCollecter()
-dt.saveData()
+dataCollector = DataCollector()
+dataCollector.saveData()
