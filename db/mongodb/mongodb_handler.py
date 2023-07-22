@@ -197,3 +197,6 @@ class MongoDBHandler(DBHandler):
         if collection_name is not None:
             self._collection = self._db[collection_name]
         return self._collection.aggregate(pipeline)
+
+    def get_prev_data(self, db_name=None, collection_name=None):
+        pass
