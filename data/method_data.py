@@ -28,4 +28,5 @@ class DataCollector:
         for cp in self.currencyPair:
             result = self.getData(currency_pair=cp)
             result["currencyPair"] = cp
+            print(result)
             self.database.insert_item(data=result)

@@ -3,7 +3,6 @@ from machine.korbit_machine import KorbitMachine
 
 chart_class = ChartMachine()
 korbit_machine = KorbitMachine()
-#상태값을 가지고 온다
 
 if chart_class.get_state():
     """볼린져 밴드에 닿았으면

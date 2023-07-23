@@ -145,6 +145,22 @@ class MongoDBHandler(DBHandler):
             self._collection = self._db[collection_name]
         return self._collection.find_one(condition)
 
+    def find_last_item(self, condition=None, db_name=None, collection_name=None):
+        """
+        MongdDB에서 하나의 문서를 검색하기 의한 메소드입니다.
+        :param condition: 검색 조건을 딕셔너리 형태로 받는다
+        :param db_name: MongoDB에서 데이터베이스에 해당하는 이름을 받는다
+        :param collection_name: 데이터베이스에 속하는 콜렉션 이름을 받는다
+        :return: 만약 검색된 문서가 있다면 문서의 내용을 반환한다
+        """
+        if condition is None:
+            condition = {}
+        if db_name is not None:
+            self._db = self._client[db_name]
+        if collection_name is not None:
+            self._collection = self._db[collection_name]
+        return self._collection.find_one()
+
     def delete_items(self, condition=None, db=None, collection=None):
         """
         Mongodb에서 다수의 collection을 삭제한다.
