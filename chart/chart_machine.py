@@ -15,11 +15,9 @@ class ChartMachine:
         coin_value = int(ticker["last"])
 
         #2. 1분 직전의 코인의 값을 가지고 온다.
-        prev_value = int(self.database.find_item()["last"])
+        prev_value = int(self.database.find_last_item()["last"])
         print(prev_value)
         print(coin_value)
-
-        print(self.database.find_last_item())
 
         #3. 두 가격을 비교 한다.
         return coin_value > prev_value

@@ -118,7 +118,6 @@ class KorbitMachine(Machine):
 
         if currency_type is None:
             raise Exception('Need to currency type')
-        time.sleep(1)
         params = {'currency_pair': currency_type}
         ticker_api_path = "/v1/ticker/detailed"
         url_path = self.BASE_API_URL + ticker_api_path
