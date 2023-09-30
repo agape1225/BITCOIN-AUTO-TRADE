@@ -54,7 +54,7 @@ class BithumbMachine:
 
         # 결과 확인
         print(processed_data)
-        return processed_data[-1]
+        return processed_data
     def get_local_data(self):
         url = "https://api.bithumb.com/public/candlestick/BTC_KRW/24h"
 

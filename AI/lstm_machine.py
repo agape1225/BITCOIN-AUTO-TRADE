@@ -11,7 +11,7 @@ class LstmMachine:
         """
         # self.model_path = "static/BITCOIN_MODEL_VER1.h5"
         self.scaler = MinMaxScaler(feature_range=(0, 1))
-        self.model = load_model("./BITCOIN_MODEL_VER1.h5", compile=False)
+        self.model = load_model("AI/BITCOIN_MODEL_VER1.h5", compile=False)
 
     """def get_model(self, current_data):
 
